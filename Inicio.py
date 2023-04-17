@@ -100,12 +100,13 @@ async def Random(ctx,*,arg):
                      "La temperatura de la superficie del sol es de aproximadamente 9.340 °F (5.160 °C)."]
       await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
      elif arg=="economia":
-        Conexion=sqlite3.connect("Economia")
-        Mi_Cursor=Conexion.cursor()
-        sql = "SELECT * FROM table ORDER BY RANDOM() LIMIT 1"
+        from Base_Datos import Economia
+        Conexion = sqlite3.connect("Economia")
+        Mi_Cursor = Conexion.cursor()
+        sql = "SELECT * FROM Economia ORDER BY RANDOM() LIMIT 1"
         Mi_Cursor.execute(sql)
         row = Mi_Cursor.fetchone()
-        await ctx.send(f'Aquí tienes un dato aleatorio: {row[0]}')
+        await ctx.send(f'Aquí tienes un dato aleatorio: {row[1]}')
      elif arg==" suscesos_historicos":
         lista_Historia=[]
         await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
