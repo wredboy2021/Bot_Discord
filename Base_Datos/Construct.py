@@ -1,27 +1,7 @@
-import os
-import time
-import schedule
-from discord import *
-from dotenv import load_dotenv
-from discord.ext import commands
-
-Dragon=commands.Bot(command_prefix='!', intents=Intents.all())
-@Dragon.event()
-async def on_Ready():
-    print("Tamos ready")
-    print("Logiado como\n")
-    pass
-@Dragon.command()
-async def test(ctx, *,args):
-    arguments = ' '.join(args)
-    await ctx.send(f'{len(args)} Palabras escritas: {arguments}')
-#Posible Funcion Cuando se posean mas Subs
-#@Dragon.command(name="Subs")
-#async def subscriptores(ctx,username):
-    #data = urllib.request.urlopen("https://www.googleapis.com/youtube/v3/channels?part=statistics&forUsername=" + username + "&key=" + key_Youtube).read()
-    #subs = json.loads(data)["items"][0]["statistics"]["subscriberCount"]
-    #response = username + " tiene " + "{:,d}".format(int(subs)) + " suscriptores!"
-    #await ctx.send(response)
+import sqlite3
+#Conexion=sqlite3.connect("Economia")
+#Mi_Cursor=Conexion.cursor()
+#Mi_Cursor.execute("CREATE TABLE Economia (Numeracion VARCHAR(6) PRIMARY KEY,Dato VARCHAR(10000))")
 Lista=["La economía mundial equivale a unos 87 billones de dólares", "La economía de Estados Unidos representa el 24% del PIB mundial", 
 "La India es la tercera economía más grande del mundo", "El 80% de los trabajos en Estados Unidos son de servicios", 
 "El turismo aporta un 11% del PIB mundial", "China es el mayor exportador mundial", "El comercio electrónico representa un 8% del comercio mundial", 
@@ -69,3 +49,7 @@ Lista=["La economía mundial equivale a unos 87 billones de dólares", "La econo
          "El comercio electrónico representa el 12,6% del comercio mundial en América Latina", 
          "El comercio de bienes y servicios entre países alcanzó los 19 billones de dólares en 2017", 
          "La inversión extranjera directa (IED) en América Latina y el Caribe aumentó un 9,4% en 2017", "Las remesas internacionales llegaron a los 539 mil millones de dólares en 2017", "El PIB mundial se espera que crezca un 3,6% en 2017", "El comercio de divisas entre países aumentó un 22% entre 2016 y 2017", "Las exportaciones de bienes y servicios de los Estados Unidos aumentaron un 3,3% en 2017", "El comercio internacional representa el 26,5% del PIB mundial en 2017", "Las exportaciones de bienes y servicios de la UE aumentaron un 3,2% en 2017", "El PIB de Estados Unidos aumentó un 2,9% en 2017", "Las inversiones extranjeras directas (IED) en América Latina aumentaron un 10% en 2017", "La tasa de desempleo juvenil en Estados Unidos es del 10,5%", "La inversión extranjera directa (IED) en Asia y el Pacífico aumentó un 4,3% en 2017", "El PIB de Latinoamérica aumentó un 1,7% en 2017", "La inversión extranjera directa (IED) en los Estados Unidos aumentó un 5,1% en 2017", "El comercio de divisas entre países aumentó un 17% entre 2016 y 2017", "El PIB de África se incrementó un 3,6% en 2017", "El comercio electrónico representa el 15,7% del comercio mundial en Asia y el Pacífico", "El comercio de bienes y servicios entre países alcanzó los 22 billones de dólares en 2018", "La inversión extranjera directa (IED) en América Latina y el Caribe aumentó un 7,8% en 2018", "Las remesas internacionales llegaron a los 602 mil millones de dólares en 2018", "El PIB mundial se espera que crezca un 3,7% en 2018", "El comercio de divisas entre países aumentó un 24% entre 2017 y 2018", "Las exportaciones de bienes y servicios de los Estados Unidos aumentaron un 4,2% en 2018", "El comercio internacional representa el 28,5% del PIB mundial en 2018", "Las exportaciones de bienes y servicios de la UE aumentaron un 4,1% en 2018", "El PIB de Estados Unidos aumentó un 2,9% en 2018", "Las inversiones extranjeras directas (IED) en América Latina aumentaron un 11% en 2018", "La tasa de desempleo juvenil en Estados Unidos es del 9,2%", "La inversión extranjera directa (IED) en Asia y el Pacífico aumentó un 5,1% en 2018", "El PIB de Latinoamérica aumentó un 1,1% en 2018", "La inversión extranjera directa (IED) en los Estados Unidos aumentó un 6,2% en 2018", "El comercio de divisas entre países aumentó un 21% entre 2017 y 2018", "El PIB de África se incrementó un 3,2% en 2018", "El comercio electrónico representa el 18,4% del comercio mundial en América Latina", "El comercio de bienes y servicios entre países alcanzó los 25 billones de dólares en 2019", "La inversión extranjera directa (IED) en América Latina y el Caribe aumentó un 6,7% en 2019"]
+
+for i in Lista:
+    tupla = tuple(i)
+    print(tupla)

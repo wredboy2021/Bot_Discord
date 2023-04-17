@@ -1,3 +1,4 @@
+from sqlite3 import connect
 import os
 import time
 import schedule
@@ -7,8 +8,8 @@ from discord.ext import commands
 import discord
 import math
 import random
-
-
+from Base_Datos import *
+import sqlite3
 key_Youtube="AIzaSyCbIbEKCKWOU4YJJlnyGkgURGPI71vJ7qE"
 load_dotenv()
 TOKEN=os.getenv('DISCORD_TOKEN')
@@ -27,7 +28,7 @@ def Active_Bot():
   while True:
    schedule.run_pending()
    time.sleep(1)
-   
+
 #Basicos
 @Dragon.command(name="Test")
 async def test(ctx, *, arg):
@@ -74,13 +75,21 @@ async def raiz(ctx,a:int):
       await ctx.send("El numero no es valido")
    pass
 
-@Dragon.command(name="Del")
-async def delete(ctx,member:discord.Member):
-   member:discord.Member
-   await ctx.channel.purge(limit=None)
-   await ctx.send(f'Has borrado Todos los mensajes{member.mention}')
 
-@Dragon.command(name="Random")
+@Dragon.command(name="Del")
+async def delete(ctx):
+    deleted = await ctx.channel.purge(limit=None)
+    await ctx.send(f'Se han borrado {len(deleted)} mensajes')
+
+@Dragon.command(name="Redes")
+async def youtube(ctx,*,arg):
+   if arg=="Y" or arg=="y":
+    await ctx.send(f"https://www.youtube.com/channel/UC3DL-9IFD6-0BJO-cjllksQ \nCanal Oficial de la Biblioteca del Infinito!")
+   elif arg=="T" or arg=="t" :
+      await ctx.send("https://www.tiktok.com/@labibliotecadelinfinito \nTiktok oficial de la biblioteca del infinito")
+
+
+@Dragon.command(name="Datos_Random")
 async def Random(ctx,*,arg):
      if arg == "random":
       random_list = ["La tasa de supervivencia del cáncer de pulmón es del 17%, la menor de todos los tipos de cáncer.", 
@@ -91,25 +100,65 @@ async def Random(ctx,*,arg):
                      "La temperatura de la superficie del sol es de aproximadamente 9.340 °F (5.160 °C)."]
       await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
      elif arg=="economia":
-        Lista_Random=[]
+        Conexion=sqlite3.connect("Economia")
+        Mi_Cursor=Conexion.cursor()
+        sql = "SELECT * FROM table ORDER BY RANDOM() LIMIT 1"
+        Mi_Cursor.execute(sql)
+        row = Mi_Cursor.fetchone()
+        await ctx.send(f'Aquí tienes un dato aleatorio: {row[0]}')
      elif arg==" suscesos_historicos":
         lista_Historia=[]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
      elif arg=="Terror_analogico":
         lista_Terror_Analogico=[]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
      elif arg=="economia":
         Lista_Random=[]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
      elif arg==" suscesos_historicos":
         lista_Historia=[]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
      elif arg=="Terror_analogico":
         lista_Terror_Analogico=[]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
      elif arg=="economia":
-        Lista_Random=[]
+        Lista_Economia=["c"]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(Lista_Economia)}")
      elif arg==" suscesos_historicos":
-        lista_Historia=[]
+        lista_Historia=["b"]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
      elif arg=="Terror_analogico":
-        lista_Terror_Analogico=[]
+        lista_Terror_Analogico=["a"]
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Terror_Analogico)}")
      else:
         await ctx.send(f"Introduce Alguno de los temas que tenemos disponibles, Seguimos trabajando para poner mas!!!!!")
+@Dragon.command("Palabra_Random")
+async def Palabras_Random(ctx):
+   mention = ctx.message.author.mention
+   Random=["Hola","Paqui","Eto","Clamor", 
+           "Frenesí", "Brumoso", "Mofle", "Bruñido", "Caprichoso", 
+           "Chorrear", "Desfallecer", "Engolosinado", "Fulgor", "Garbo", 
+           "Gazmoño", "Gesticular", "Hilar", "Incendio", "Intrigar", "Jovial", 
+           "Lacónico", "Lisonjero", "Mascullar", "Mitigar", "Nimio", "Oliscar", "Pertinaz", "Querellante", "Regocijo", "Sibilante", "Titubeante", 
+           "Ungüento", "Vago", "Voluble", "Zafarrancho", "Abulia", "Bache", "Chamuscar", "Desparpajo", "Encrespado", "Fervor", "Garabato", "Gazmoñería", "Gruñido", 
+           "Herir", "Inaudito", "Jugarreta", "Lambiscón", "Lívido", "Mascara", "Mordacidad", "Nimiedad", "Oliscar", "Perturbación", "Quemarropa", "Risueño", 
+           "Sibaritismo", "Titánico", "Ufano", "Vanagloria", "Zarandear", "Acicalar", "Badulaque", "Chillar", "Despabilado", "Enfervorizar", "Fervoroso", "Garabatear", 
+           "Gazmoñerías", "Gruñón", "Heráldico", "Incendiar", "Jugarretear", "Lambiscar", "Luminoso", "Masoquista", "Mormullo", "Noveno", "Ostentoso", "Perplejidad", 
+           "Quedar atónito", "Rizar el rizo", "Sibarita", "Tiznar", "Ufano", "Vaporoso", "Zozobrar","Buenos dias", "Buenas tardes", "Buenas noches", "Adios", "Saludos", 
+           "Hola de nuevo", "Hasta pronto", "Gracias", "Por favor", "Disculpa", "Perdon", "Cuidado", "Alegria", "Felicidad", "Amor", "Cariño", "Bienvenida", "Bienvenido", 
+           "Suerte", "Exitos", "Divertido", "Aventura", "Disfruta", "Sabes", "Creo", "Piensa", "Intenta", "Comprende", "Comparte", "Ayuda", "Emocion", "Tristeza", 
+           "Tension", "Tiempo", "Realidad", "Imagina", "Fantasia", "Idea", "Proyecto", "Pasatiempo", "Razon", "Luchar", "Poder", "Riqueza", "Creativo", "Inspiracion",
+             "Alegria", "Verdad", "Mentira", "Mundo", "Universo", "Unido", "Individual", "Cambio", "Futuro", "Vida", "Muerto", "Vivo", "Movimiento", "Siempre", "Nunca", 
+             "Nada", "Todo", "Aqui", "Alli", "Ahora", "Siempre", "Ayer", "Mañana", "Razonable", "Irrazonable", "Corto", "Largo", "Ligero", "Pesado", "Clima", "Tierra", 
+             "Mar", "Cielo", "Naturaleza", "Animales", "Plantas", "Cultura", "Civilizacion", "Arte", "Musica", "Cine", "Viajes", "Deportes", "Juegos", "Cocina", "Comida", 
+             "Bebida", "Lectura", "Escritura", "Ciencia", "Tecnologia", "Oportunidad", "Confianza", "Respeto", "Honestidad", "Integridad", "Libertad", "Justicia", "Global", "Local", "Positivo", "Negativo", "Habilidad", "Desventaja", 
+             "Historia", "Mitos", "Leyendas", "Fantasmas", "Encuentro", "Despedida", "Rutina", "Cambio", "Verano", "Invierno", "Primavera", "Otoño", "Amanecer", "Atardecer", 
+             "Alegria", "Tristeza", "Aprendizaje", "Enseñanza", "Protocolo", "Libertad", "Dinero", "Salud", "Familia", "Amigos", "Confianza", "Magia", "Sorpresa", "Misterio","xertz", "xystus", "xanthosis", "xenelasy", "xerarch", "xerography", 
+             "xoanon", "xenoglossy", "xemeroid", "xylogenous", "xenophobia", "xylology", "xenodochy", "xyster", "xenia", "xylomancy", "xiphias", "xenogenesis", "xerasia", 
+             "xenomancy", "xyster", "xylophone", "xeranthemum", "xerlin", "xyloid", "xenogenesis", "xenon", "xylography", "xenoparasite", "xenolith", "xerophile", 
+             "xenogenesis", "xylomelum", "xenomorph", "xenopos", "xylophagous", "xenius", "xerasia", "xenodochy", "xylomancy", "xerampelina", "xanthic", "xenia", "xanthine", 
+             "xenogenesis", "xeromancy", "xenotropic", "xenotime", "xenogamy", "xeroderma", "xenogenesis", "xylorcin", "xerotripsis"]
+   await ctx.send(f"{mention} Tu Palabra Random es:{random.choice(Random)}")
 
 
 
