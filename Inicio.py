@@ -8,7 +8,6 @@ from discord.ext import commands
 import discord
 import math
 import random
-from Base_Datos import *
 import sqlite3
 key_Youtube="AIzaSyCbIbEKCKWOU4YJJlnyGkgURGPI71vJ7qE"
 load_dotenv()
@@ -22,23 +21,18 @@ class Estado():
     print("En funcionamiento!")
     print(f"User:{Dragon.user.name}")
     print(f"Id:{Dragon.user.id}")
+
     
 def Active_Bot():
   schedule.every().monday.at("08:00").do(Active_Bot)
   while True:
    schedule.run_pending()
    time.sleep(1)
-
+def is_admin():
+    def predicate(ctx):
+        return ctx.guild is not None and ctx.author.guild_permissions.administrator
+    return commands.check(predicate)
 #Basicos
-@Dragon.command(name="Test")
-async def test(ctx, *, arg):
-    await ctx.send(arg)
-
-@Dragon.command(name="Dilo")
-async def dilo(ctx, member: discord.Member, *,arg):
-    await ctx.send(f'Le has dicho a {member.mention} '+ ''.join(arg))
-    await ctx.message.delete()
-
 @Dragon.command(name="S")
 async def add(ctx, a: int, b: int):
     try:
@@ -63,7 +57,7 @@ async def div(ctx,a:int,b:int):
 @Dragon.command(name="M")
 async def mul(ctx,a:int,b:int):
     try:
-     await ctx.send(f"El resultado de la Multplicacion es: {a**b}")
+     await ctx.send(f"El resultado de la Multplicacion es: {a*b}")
     except discord.ext.commands.errors.BadArgument:
       return "No"
       
@@ -74,9 +68,9 @@ async def raiz(ctx,a:int):
    else:
       await ctx.send("El numero no es valido")
    pass
-
-
-@Dragon.command(name="Del")
+@commands.has_permissions(administrator=True)
+@is_admin()
+@Dragon.command(name="Del",hidden=True)
 async def delete(ctx):
     deleted = await ctx.channel.purge(limit=None)
     await ctx.send(f'Se han borrado {len(deleted)} mensajes')
@@ -88,40 +82,45 @@ async def youtube(ctx,*,arg):
    elif arg=="T" or arg=="t" :
       await ctx.send("https://www.tiktok.com/@labibliotecadelinfinito \nTiktok oficial de la biblioteca del infinito")
 
-
-@Dragon.command(name="Datos_Random")
+#Funcion en desarrollo 
+@Dragon.command(name="Datos")
 async def Random(ctx,*,arg):
-     if arg == "random":
-      random_list = ["La tasa de supervivencia del cáncer de pulmón es del 17%, la menor de todos los tipos de cáncer.", 
-                     "El caballo más rápido de todos los tiempos fue el caballo de carreras norteamericano, Secretariat, que corrió una milla en 1 minuto y 59 segundos.",
-                     "Los bebés tienen más de 100 huesos más que los adultos, porque algunos se fusionan a medida que crecen.",
-                     "Una sola hoja de una alfilera de árbol de cedro rojo contiene más de 10.000 semillas.",
-                     "Los tiburones tienen más de 20.000 filas de dientes a lo largo de su vida.",
-                     "La temperatura de la superficie del sol es de aproximadamente 9.340 °F (5.160 °C)."]
-      await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
-     elif arg=="economia":
-        from Base_Datos import Economia
-        Conexion = sqlite3.connect("Economia")
+     if arg == "Curiosidades" or arg == "curiosidades":
+        Conexion = sqlite3.connect("Base_Datos/Curiosidades.db")
+        Mi_Cursor = Conexion.cursor()
+        sql = "SELECT * FROM Curiosidades ORDER BY RANDOM() LIMIT 1"
+        Mi_Cursor.execute(sql)
+        row = Mi_Cursor.fetchone()
+        Mi_Cursor.close()
+        await ctx.send(f'Aqui tienes una curiosidad aleatorio  {ctx.author.mention}: {row[1]}')
+     elif arg=="economia" or arg=="Economia":
+        Conexion = sqlite3.connect("Base_Datos/Economia.db")
         Mi_Cursor = Conexion.cursor()
         sql = "SELECT * FROM Economia ORDER BY RANDOM() LIMIT 1"
         Mi_Cursor.execute(sql)
         row = Mi_Cursor.fetchone()
-        await ctx.send(f'Aquí tienes un dato aleatorio: {row[1]}')
-     elif arg==" suscesos_historicos":
-        lista_Historia=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
-     elif arg=="Terror_analogico":
+        Mi_Cursor.close()
+        await ctx.send(f'Aquí tienes un dato aleatorio sobre economia {ctx.author.mention}: {row[1]}')
+     elif arg=="Backrooms" or "backrooms":
+      Conexion = sqlite3.connect("Base_Datos/Backrooms.db")
+      Mi_Cursor = Conexion.cursor()
+      sql = "SELECT * FROM Backrooms_Niveles ORDER BY RANDOM() LIMIT 1"
+      Mi_Cursor.execute(sql)
+      row = Mi_Cursor.fetchone()
+      Mi_Cursor.close()
+      await ctx.send(f"Aqui tienes un nivel aleatorio  {ctx.author.mention}: {row[1]}")
+     elif arg=="Personajes_Historicos":
         lista_Terror_Analogico=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
-     elif arg=="economia":
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
+     elif arg=="Lovecraft":
         Lista_Random=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
      elif arg==" suscesos_historicos":
         lista_Historia=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
+        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
      elif arg=="Terror_analogico":
         lista_Terror_Analogico=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(random_list)}")
+        await ctx.send(f"Aquí tienes un dato random:  {random.choice(Lista_Backrooms)}")
      elif arg=="economia":
         Lista_Economia=["c"]
         await ctx.send(f"Aquí tienes un dato random: {random.choice(Lista_Economia)}")
@@ -131,37 +130,24 @@ async def Random(ctx,*,arg):
      elif arg=="Terror_analogico":
         lista_Terror_Analogico=["a"]
         await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Terror_Analogico)}")
+     elif arg=="Backrooms":
+       Lista_Backrooms=[]
+     elif arg=="Niveles_Backrooms":
+        Lista_Terror_Analogico=[]
+     elif arg=="":
+       Lista_Economia=[]
      else:
         await ctx.send(f"Introduce Alguno de los temas que tenemos disponibles, Seguimos trabajando para poner mas!!!!!")
+
 @Dragon.command("Palabra_Random")
 async def Palabras_Random(ctx):
-   mention = ctx.message.author.mention
-   Random=["Hola","Paqui","Eto","Clamor", 
-           "Frenesí", "Brumoso", "Mofle", "Bruñido", "Caprichoso", 
-           "Chorrear", "Desfallecer", "Engolosinado", "Fulgor", "Garbo", 
-           "Gazmoño", "Gesticular", "Hilar", "Incendio", "Intrigar", "Jovial", 
-           "Lacónico", "Lisonjero", "Mascullar", "Mitigar", "Nimio", "Oliscar", "Pertinaz", "Querellante", "Regocijo", "Sibilante", "Titubeante", 
-           "Ungüento", "Vago", "Voluble", "Zafarrancho", "Abulia", "Bache", "Chamuscar", "Desparpajo", "Encrespado", "Fervor", "Garabato", "Gazmoñería", "Gruñido", 
-           "Herir", "Inaudito", "Jugarreta", "Lambiscón", "Lívido", "Mascara", "Mordacidad", "Nimiedad", "Oliscar", "Perturbación", "Quemarropa", "Risueño", 
-           "Sibaritismo", "Titánico", "Ufano", "Vanagloria", "Zarandear", "Acicalar", "Badulaque", "Chillar", "Despabilado", "Enfervorizar", "Fervoroso", "Garabatear", 
-           "Gazmoñerías", "Gruñón", "Heráldico", "Incendiar", "Jugarretear", "Lambiscar", "Luminoso", "Masoquista", "Mormullo", "Noveno", "Ostentoso", "Perplejidad", 
-           "Quedar atónito", "Rizar el rizo", "Sibarita", "Tiznar", "Ufano", "Vaporoso", "Zozobrar","Buenos dias", "Buenas tardes", "Buenas noches", "Adios", "Saludos", 
-           "Hola de nuevo", "Hasta pronto", "Gracias", "Por favor", "Disculpa", "Perdon", "Cuidado", "Alegria", "Felicidad", "Amor", "Cariño", "Bienvenida", "Bienvenido", 
-           "Suerte", "Exitos", "Divertido", "Aventura", "Disfruta", "Sabes", "Creo", "Piensa", "Intenta", "Comprende", "Comparte", "Ayuda", "Emocion", "Tristeza", 
-           "Tension", "Tiempo", "Realidad", "Imagina", "Fantasia", "Idea", "Proyecto", "Pasatiempo", "Razon", "Luchar", "Poder", "Riqueza", "Creativo", "Inspiracion",
-             "Alegria", "Verdad", "Mentira", "Mundo", "Universo", "Unido", "Individual", "Cambio", "Futuro", "Vida", "Muerto", "Vivo", "Movimiento", "Siempre", "Nunca", 
-             "Nada", "Todo", "Aqui", "Alli", "Ahora", "Siempre", "Ayer", "Mañana", "Razonable", "Irrazonable", "Corto", "Largo", "Ligero", "Pesado", "Clima", "Tierra", 
-             "Mar", "Cielo", "Naturaleza", "Animales", "Plantas", "Cultura", "Civilizacion", "Arte", "Musica", "Cine", "Viajes", "Deportes", "Juegos", "Cocina", "Comida", 
-             "Bebida", "Lectura", "Escritura", "Ciencia", "Tecnologia", "Oportunidad", "Confianza", "Respeto", "Honestidad", "Integridad", "Libertad", "Justicia", "Global", "Local", "Positivo", "Negativo", "Habilidad", "Desventaja", 
-             "Historia", "Mitos", "Leyendas", "Fantasmas", "Encuentro", "Despedida", "Rutina", "Cambio", "Verano", "Invierno", "Primavera", "Otoño", "Amanecer", "Atardecer", 
-             "Alegria", "Tristeza", "Aprendizaje", "Enseñanza", "Protocolo", "Libertad", "Dinero", "Salud", "Familia", "Amigos", "Confianza", "Magia", "Sorpresa", "Misterio","xertz", "xystus", "xanthosis", "xenelasy", "xerarch", "xerography", 
-             "xoanon", "xenoglossy", "xemeroid", "xylogenous", "xenophobia", "xylology", "xenodochy", "xyster", "xenia", "xylomancy", "xiphias", "xenogenesis", "xerasia", 
-             "xenomancy", "xyster", "xylophone", "xeranthemum", "xerlin", "xyloid", "xenogenesis", "xenon", "xylography", "xenoparasite", "xenolith", "xerophile", 
-             "xenogenesis", "xylomelum", "xenomorph", "xenopos", "xylophagous", "xenius", "xerasia", "xenodochy", "xylomancy", "xerampelina", "xanthic", "xenia", "xanthine", 
-             "xenogenesis", "xeromancy", "xenotropic", "xenotime", "xenogamy", "xeroderma", "xenogenesis", "xylorcin", "xerotripsis"]
-   await ctx.send(f"{mention} Tu Palabra Random es:{random.choice(Random)}")
-
-
+    Conexion = sqlite3.connect("Base_Datos/Palabras.db")
+    Mi_Cursor = Conexion.cursor()
+    sql = "SELECT * FROM Palabras ORDER BY RANDOM() LIMIT 1"
+    Mi_Cursor.execute(sql)
+    row = Mi_Cursor.fetchone()
+    Mi_Cursor.close()
+    await ctx.send(f'Aqui tienes una palabra aleatoria: {row[1]}')
 
 @Dragon.command(name="def")    
 async def definiciones(ctx,*,arg):
@@ -173,17 +159,26 @@ async def definiciones(ctx,*,arg):
       Lista_Terror_Analogico=[]
    elif arg=="Def_Economia":
       Lista_Economia=[]
-   
+
+@Dragon.command(name="A")
+async def Answerd(ctx,arg):
+   if arg=="D" or arg=="d":
+      await ctx.send(f"Buenos dias a ti tambien")
+   elif arg== "T" or arg== "t":
+      await ctx.send(f"Buenas tardes A Ti tambien")
+   elif arg== "N" or arg== "n":
+      await ctx.send(f"Buenas Noches Para ti tambien {ctx.author.mention}")
+
+class Slapper(commands.Converter):
+    async def convert(self, ctx, argument):
+        to_slap = random.choice(ctx.guild.members)
+        return f'{ctx.author} slapped {to_slap} because *{argument}*'
 
 
-class Advanced():
-   def __init__(self,ctx,arg):
-      self.ctx=ctx
-      self.arg=arg
-   def Answerd():
-      pass      
-
-
+@commands.has_any_role('Hola',"Messi","A")
+@Dragon.command(name="Slap")
+async def slap(ctx, *, reason: Slapper):
+    await ctx.send(reason)
 
 Dragon.run(TOKEN)
 Dragon(Active_Bot()) 
