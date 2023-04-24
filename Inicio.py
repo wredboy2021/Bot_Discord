@@ -1,4 +1,4 @@
-from sqlite3 import connect
+
 import os
 import time
 import schedule
@@ -9,18 +9,20 @@ import discord
 import math
 import random
 import sqlite3
+from discord.utils import get
 key_Youtube="AIzaSyCbIbEKCKWOU4YJJlnyGkgURGPI71vJ7qE"
 load_dotenv()
 TOKEN=os.getenv('DISCORD_TOKEN')
-Dragon=commands.Bot(command_prefix='!', intents=Intents.all())
+Dragon=commands.Bot(command_prefix='/', intents=Intents.all())
 class Estado():
- @Dragon.event
- async def on_ready():
-    Estado.on_ready()
-    Active_Bot
-    print("En funcionamiento!")
-    print(f"User:{Dragon.user.name}")
-    print(f"Id:{Dragon.user.id}")
+    @Dragon.event
+    async def on_ready():
+        Active_Bot
+        print("En funcionamiento!")
+        print(f"User:{Dragon.user.name}")
+        print(f"Id:{Dragon.user.id}")
+        canal = discord.utils.get(Dragon.get_all_channels(), id=1092477049941262348)
+        await canal.send('@everyone ¡Ya Estoy Activo!')
 
     
 def Active_Bot():
@@ -84,8 +86,8 @@ async def youtube(ctx,*,arg):
 
 #Funcion en desarrollo 
 @Dragon.command(name="Datos")
-async def Random(ctx,*,arg):
-     if arg == "Curiosidades" or arg == "curiosidades":
+async def Random(ctx,*,args):
+     if args == "Curiosidades" or args == "curiosidades":
         Conexion = sqlite3.connect("Base_Datos/Curiosidades.db")
         Mi_Cursor = Conexion.cursor()
         sql = "SELECT * FROM Curiosidades ORDER BY RANDOM() LIMIT 1"
@@ -93,7 +95,7 @@ async def Random(ctx,*,arg):
         row = Mi_Cursor.fetchone()
         Mi_Cursor.close()
         await ctx.send(f'Aqui tienes una curiosidad aleatorio  {ctx.author.mention}: {row[1]}')
-     elif arg=="economia" or arg=="Economia":
+     elif args=="economia" or args=="Economia":
         Conexion = sqlite3.connect("Base_Datos/Economia.db")
         Mi_Cursor = Conexion.cursor()
         sql = "SELECT * FROM Economia ORDER BY RANDOM() LIMIT 1"
@@ -101,40 +103,55 @@ async def Random(ctx,*,arg):
         row = Mi_Cursor.fetchone()
         Mi_Cursor.close()
         await ctx.send(f'Aquí tienes un dato aleatorio sobre economia {ctx.author.mention}: {row[1]}')
-     elif arg=="Backrooms" or "backrooms":
-      Conexion = sqlite3.connect("Base_Datos/Backrooms.db")
-      Mi_Cursor = Conexion.cursor()
-      sql = "SELECT * FROM Backrooms_Niveles ORDER BY RANDOM() LIMIT 1"
-      Mi_Cursor.execute(sql)
-      row = Mi_Cursor.fetchone()
-      Mi_Cursor.close()
-      await ctx.send(f"Aqui tienes un nivel aleatorio  {ctx.author.mention}: {row[1]}")
-     elif arg=="Personajes_Historicos":
-        lista_Terror_Analogico=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
-     elif arg=="Lovecraft":
-        Lista_Random=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
-     elif arg==" suscesos_historicos":
+     elif args=="Terroranalogico" or args=="terroranalogico":
+       Conexion = sqlite3.connect("Base_Datos/TerrorAnalogico.db")
+       Mi_Cursor = Conexion.cursor()
+       sql = "SELECT * FROM Terroranalogico ORDER BY RANDOM() LIMIT 1"
+       Mi_Cursor.execute(sql)
+       row = Mi_Cursor.fetchone()
+       Mi_Cursor.close()
+       await ctx.send(f'Aqui tienes un dato Aleatorio sobre terror analogico{ctx.author.mention}: {row[1]}')
+     elif args=="Backrooms" or args=="backrooms":
+        Conexion = sqlite3.connect("Base_Datos/Backrooms.db")
+        Mi_Cursor = Conexion.cursor()
+        sql = "SELECT * FROM Backrooms_Niveles ORDER BY RANDOM() LIMIT 1"
+        Mi_Cursor.execute(sql)
+        row = Mi_Cursor.fetchone()
+        Mi_Cursor.close()
+        await ctx.send(f'Aqui tienes un nivel aleatorio de los backrooms {ctx.author.mention} : {row[1]}')
+     elif args=="PersonajesHistoricos":
+        Conexion = sqlite3.connect("Base_Datos/PersonajesHistoricos.db")
+        Mi_Cursor = Conexion.cursor()
+        sql = "SELECT * FROM Personaje ORDER BY RANDOM() LIMIT 1"
+        Mi_Cursor.execute(sql)
+        row = Mi_Cursor.fetchone()
+        Mi_Cursor.close()
+        await ctx.send(f'Aqui Tienes un Personaje Historico y una curiosidad sobre el {ctx.author.mention} : {row[1]}')
+     elif args=="Lovecraft":
+        Conexion = sqlite3.connect("Base_Datos/Lovecraft.db")
+        Mi_Cursor = Conexion.cursor()
+        sql = "SELECT * FROM Lovecraft ORDER BY RANDOM() LIMIT 1"
+        Mi_Cursor.execute(sql)
+        row = Mi_Cursor.fetchone()
+        Mi_Cursor.close()
+        await ctx.send(f'Aqui tienes un dato curioso sobre la literatura lovecraftiana{ctx.author.mention} : {row[1]}')
+     elif args=="Scp":
         lista_Historia=[]
         await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
-     elif arg=="Terror_analogico":
+     elif args=="A":
         lista_Terror_Analogico=[]
         await ctx.send(f"Aquí tienes un dato random:  {random.choice(Lista_Backrooms)}")
-     elif arg=="economia":
+     elif args=="B":
         Lista_Economia=["c"]
         await ctx.send(f"Aquí tienes un dato random: {random.choice(Lista_Economia)}")
-     elif arg==" suscesos_historicos":
+     elif args==" suscesos_historicos":
         lista_Historia=["b"]
         await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
-     elif arg=="Terror_analogico":
-        lista_Terror_Analogico=["a"]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Terror_Analogico)}")
-     elif arg=="Backrooms":
+     elif args=="m":
        Lista_Backrooms=[]
-     elif arg=="Niveles_Backrooms":
+     elif args=="minmmjkm":
         Lista_Terror_Analogico=[]
-     elif arg=="":
+     elif args=="":
        Lista_Economia=[]
      else:
         await ctx.send(f"Introduce Alguno de los temas que tenemos disponibles, Seguimos trabajando para poner mas!!!!!")
@@ -149,18 +166,19 @@ async def Palabras_Random(ctx):
     Mi_Cursor.close()
     await ctx.send(f'Aqui tienes una palabra aleatoria: {row[1]}')
 
-@Dragon.command(name="def")    
-async def definiciones(ctx,*,arg):
-   if arg=="Def":
-      Lista_Random=[]
-   elif arg=="Def_Backrooms":
-      Lista_Backrooms=[]
-   elif arg=="Def_Terror_Analogico":
-      Lista_Terror_Analogico=[]
-   elif arg=="Def_Economia":
-      Lista_Economia=[]
+@Dragon.command(name="Rol")
+@is_admin()
+@commands.has_permissions(administrator=True)    
+async def Rol(ctx, usuario: discord.Member):
+    rol = discord.utils.get(ctx.guild.roles, name='Messi')
+    await usuario.add_roles(rol)
+    await ctx.send(f"Se ha asignado el rol {rol.name} a {usuario.mention}")
 
-@Dragon.command(name="A")
+@Rol.error
+async def rol_error(ctx, error):
+    if isinstance(error, commands.MemberNotFound):
+        await ctx.send("No se ha encontrado al usuario mencionado.")
+@Dragon.command(name="Conversa")
 async def Answerd(ctx,arg):
    if arg=="D" or arg=="d":
       await ctx.send(f"Buenos dias a ti tambien")
@@ -168,13 +186,28 @@ async def Answerd(ctx,arg):
       await ctx.send(f"Buenas tardes A Ti tambien")
    elif arg== "N" or arg== "n":
       await ctx.send(f"Buenas Noches Para ti tambien {ctx.author.mention}")
+      
+class MemberRoles(commands.Converter):
+    async def convert(self, ctx, argument):
+        member = ctx.author
+        return [role.name for role in member.roles[1:]]
+
+@Dragon.command(name="RolesUser")
+async def roles(ctx, *, member: MemberRoles = None):
+    if not member:
+        member = ctx.author
+    roles = await MemberRoles().convert(ctx, member)
+    if len(roles) == 0:
+        await ctx.send("No tienes roles asignados por el momento.")
+    else:
+        await ctx.send(f"Tienes los siguientes roles {ctx.author.mention} : {', '.join(roles)}")
+
+
 
 class Slapper(commands.Converter):
     async def convert(self, ctx, argument):
         to_slap = random.choice(ctx.guild.members)
-        return f'{ctx.author} slapped {to_slap} because *{argument}*'
-
-
+        return f'{ctx.author.mention} Abofeteo a {to_slap} Porque *{argument}*'
 @commands.has_any_role('Hola',"Messi","A")
 @Dragon.command(name="Slap")
 async def slap(ctx, *, reason: Slapper):

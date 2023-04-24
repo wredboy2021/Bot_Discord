@@ -1,14 +1,17 @@
 Ideas para el bot de discord
-Capaz de responder si le preguntas palabras claves con diferentes respuestas-Pendiente
-funcion para las estadisticas de youtube-En espera
-funcion para estadisticas de stats del server-Pendiente
+funcion para las estadisticas de youtube-(En espera)
 Dar definiciones con el comando random-Completado Parcial mente
 Contar Chistes Random-Pendiente
 Contar anecdotas Random-Pendiente
-Dar un rol especial solo si un admin lo da-Pendiente 
-Ser capaz de decir buenos dias todos los dias sin tener que llamar a un comando-Pendiente
 Si le escriben al privado responder con un mensaje automatico-Pendiente
-Decir palabras Random si se le pregunta-Parcial mente Completada
 Dar links sobre paginas interesantes dependiendo de que temas se les pregunte-Pendiente
-Ser capaz de estar conectado todo el dia(Prioridad)
-Asignar comandos dependiendo de los roles de los miembros-Pendiente (Prioridad si se quiere usar el bot en un server publico)
+
+
+
+
+
+
+
+"opcionales"
+Ser capaz de estar conectado todo el dia(Posibilidad si es requerida)
+Asignar comandos dependiendo de los roles de los miembros-Pendiente (Prioridad si se quiere usar el bot en un server publico) Completado
