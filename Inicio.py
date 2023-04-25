@@ -6,6 +6,7 @@ from discord import *
 from dotenv import load_dotenv
 from discord.ext import commands
 import discord
+from discord_slash import SlashCommand, SlashContext
 import math
 import random
 import sqlite3
@@ -14,6 +15,8 @@ key_Youtube="AIzaSyCbIbEKCKWOU4YJJlnyGkgURGPI71vJ7qE"
 load_dotenv()
 TOKEN=os.getenv('DISCORD_TOKEN')
 Dragon=commands.Bot(command_prefix='/', intents=Intents.all())
+client = discord.Client(intents=discord.Intents.all())
+slash = SlashCommand(client, sync_commands=True)
 class Estado():
     @Dragon.event
     async def on_ready():
@@ -231,7 +234,7 @@ async def joke(ctx,*,args):
         await ctx.send(f'Disfruta la anecdota que te contare{ctx.author.mention} : {row[1]}')  
    else:
          await ctx.send(f"Este comando solo funciona para los chistes y anecdotas, prueba denuevo {ctx.author.mention}")
-
+slash.register_all_commands()
 
 Dragon.run(TOKEN)
 Dragon(Active_Bot()) 
