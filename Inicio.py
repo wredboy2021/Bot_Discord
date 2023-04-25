@@ -22,7 +22,7 @@ class Estado():
         print(f"User:{Dragon.user.name}")
         print(f"Id:{Dragon.user.id}")
         canal = discord.utils.get(Dragon.get_all_channels(), id=1092477049941262348)
-        await canal.send('@everyone ¡Ya Estoy Activo!')
+        await canal.send('@here ¡Ya Estoy Activo!')
 
     
 def Active_Bot():
@@ -136,23 +136,21 @@ async def Random(ctx,*,args):
         Mi_Cursor.close()
         await ctx.send(f'Aqui tienes un dato curioso sobre la literatura lovecraftiana{ctx.author.mention} : {row[1]}')
      elif args=="Scp":
-        lista_Historia=[]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
+         Conexion = sqlite3.connect("Base_Datos/Palabras.db")
+         Mi_Cursor = Conexion.cursor()
+         sql = "SELECT * FROM Palabras ORDER BY RANDOM() LIMIT 1"
+         Mi_Cursor.execute(sql)
+         row = Mi_Cursor.fetchone()
+         Mi_Cursor.close()
+         await ctx.send(f'Aqui tienes una palabra aleatoria: {row[1]}')
      elif args=="A":
-        lista_Terror_Analogico=[]
-        await ctx.send(f"Aquí tienes un dato random:  {random.choice(Lista_Backrooms)}")
-     elif args=="B":
-        Lista_Economia=["c"]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(Lista_Economia)}")
-     elif args==" suscesos_historicos":
-        lista_Historia=["b"]
-        await ctx.send(f"Aquí tienes un dato random: {random.choice(lista_Historia)}")
-     elif args=="m":
-       Lista_Backrooms=[]
-     elif args=="minmmjkm":
-        Lista_Terror_Analogico=[]
-     elif args=="":
-       Lista_Economia=[]
+          Conexion = sqlite3.connect("Base_Datos/Palabras.db")
+          Mi_Cursor = Conexion.cursor()
+          sql = "SELECT * FROM Palabras ORDER BY RANDOM() LIMIT 1"
+          Mi_Cursor.execute(sql)
+          row = Mi_Cursor.fetchone()
+          Mi_Cursor.close()
+          await ctx.send(f'Aqui tienes una palabra aleatoria: {row[1]}')
      else:
         await ctx.send(f"Introduce Alguno de los temas que tenemos disponibles, Seguimos trabajando para poner mas!!!!!")
 
@@ -178,14 +176,15 @@ async def Rol(ctx, usuario: discord.Member):
 async def rol_error(ctx, error):
     if isinstance(error, commands.MemberNotFound):
         await ctx.send("No se ha encontrado al usuario mencionado.")
-@Dragon.command(name="Conversa")
-async def Answerd(ctx,arg):
-   if arg=="D" or arg=="d":
-      await ctx.send(f"Buenos dias a ti tambien")
-   elif arg== "T" or arg== "t":
-      await ctx.send(f"Buenas tardes A Ti tambien")
-   elif arg== "N" or arg== "n":
-      await ctx.send(f"Buenas Noches Para ti tambien {ctx.author.mention}")
+@Dragon.command(name="Web")
+async def Answerd(ctx):
+      Conexion = sqlite3.connect("Base_Datos/Web.db")
+      Mi_Cursor = Conexion.cursor()
+      sql = "SELECT * FROM Web ORDER BY RANDOM() LIMIT 1"
+      Mi_Cursor.execute(sql)
+      row = Mi_Cursor.fetchone()
+      Mi_Cursor.close()
+      await ctx.send(f'Espero te parezca interesante esta pagina web{ctx.author.mention} : {row[1]}')
       
 class MemberRoles(commands.Converter):
     async def convert(self, ctx, argument):
@@ -212,6 +211,27 @@ class Slapper(commands.Converter):
 @Dragon.command(name="Slap")
 async def slap(ctx, *, reason: Slapper):
     await ctx.send(reason)
+@Dragon.command(name="Call")
+async def joke(ctx,*,args):
+   if args=="Chiste" or args=="Chistes":
+       Conexion = sqlite3.connect("Base_Datos/Chistes.db")
+       Mi_Cursor = Conexion.cursor()
+       sql = "SELECT * FROM Chistes ORDER BY RANDOM() LIMIT 1"
+       Mi_Cursor.execute(sql)
+       row = Mi_Cursor.fetchone()
+       Mi_Cursor.close()
+       await ctx.send(f'Espero te guste el chiste que te contare{ctx.author.mention} : {row[1]}')
+   elif args=="Anecdota" or args=="anecdota":
+        Conexion = sqlite3.connect("Base_Datos/Anecdotas.db")
+        Mi_Cursor = Conexion.cursor()
+        sql = "SELECT * FROM Anecdotas ORDER BY RANDOM() LIMIT 1"
+        Mi_Cursor.execute(sql)
+        row = Mi_Cursor.fetchone()
+        Mi_Cursor.close()
+        await ctx.send(f'Disfruta la anecdota que te contare{ctx.author.mention} : {row[1]}')  
+   else:
+         await ctx.send(f"Este comando solo funciona para los chistes y anecdotas, prueba denuevo {ctx.author.mention}")
+
 
 Dragon.run(TOKEN)
 Dragon(Active_Bot()) 

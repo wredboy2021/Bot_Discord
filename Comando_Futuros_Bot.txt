@@ -1,10 +1,6 @@
 Ideas para el bot de discord
 funcion para las estadisticas de youtube-(En espera)
 Dar definiciones con el comando random-Completado Parcial mente
-Contar Chistes Random-Pendiente
-Contar anecdotas Random-Pendiente
-Si le escriben al privado responder con un mensaje automatico-Pendiente
-Dar links sobre paginas interesantes dependiendo de que temas se les pregunte-Pendiente
 
 
 
